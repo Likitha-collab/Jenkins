@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('* * * * *')  // Poll every minute
+    }
+
+    stages {
+        stage('Checkout develop branch') {
+            steps {
+                // Clone only develop branch
+                git branch: 'develop', url: 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Copy to folder') {
+            steps {
+                script {
+                    def targetDir = 'my-folder'
+                    sh "mkdir -p ${targetDir}"
+                    sh "cp -r * ${targetDir}/"
+                    sh "ls -la ${targetDir}"
+                }
+            }
+        }
+    }
+}
+
